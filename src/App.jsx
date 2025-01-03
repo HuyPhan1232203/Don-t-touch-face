@@ -17,6 +17,9 @@ var sound = new Howl({
 
 function App() {
   const userVideo = useRef();
+  const [disable1, setDisable1] = useState(true);
+  const [disable2, setDisable2] = useState(true);
+  const [disable3, setDisable3] = useState(true);
   const classifier = useRef();
   const [load, setLoad] = useState("");
   const mobilenet_module = useRef();
@@ -33,6 +36,7 @@ function App() {
     //done setup
     setLoad("setup done");
     setLoad("Don't touch your face and click Train 1");
+    setDisable1(false);
     setShowBtn(true);
     initNotifications({ cooldown: 3000 });
   };
@@ -79,6 +83,13 @@ function App() {
       setLoad(`Progress ${parseInt(((i + 1) / TRAINING_TIME) * 100)}%`);
       await handleTraining(label);
     }
+    if (disable1 === true) {
+      setDisable2(true);
+      setDisable3(false);
+      return;
+    }
+    setDisable1(true);
+    setDisable2(false);
   };
 
   const run = async () => {
@@ -120,6 +131,7 @@ function App() {
       <video ref={userVideo} className="video" autoPlay></video>
       <div className={`control ${showBtn ? "show" : ""}`}>
         <Button
+          disabled={disable1}
           className="btn"
           onClick={() => {
             handleTrain(NOT_TOUCH_LABEL);
@@ -128,6 +140,7 @@ function App() {
           Train 1
         </Button>
         <Button
+          disabled={disable2}
           className="btn"
           onClick={() => {
             handleTrain(TOUCHED_LABEL);
@@ -136,6 +149,7 @@ function App() {
           Train 2
         </Button>
         <Button
+          disabled={disable3}
           className="btn"
           onClick={() => {
             run();
