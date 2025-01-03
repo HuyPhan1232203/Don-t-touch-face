@@ -18,3 +18,53 @@
     margin: 20px;
     border-radius: 10px;
 }
+.control{
+    display: none;
+}
+.control.show{
+    display: block;
+}
+/* styles.css */
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0; /* Light background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.video {
+    width: 100%;
+    max-width: 600px; /* Limit video width */
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.control {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff; /* Bootstrap primary color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+h2 {
+    margin-top: 20px;
+    font-size: 24px;
+    color: #333; /* Dark text color */
+}

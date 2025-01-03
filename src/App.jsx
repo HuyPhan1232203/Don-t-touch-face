@@ -10,6 +10,7 @@ import * as tf from "@tensorflow/tfjs";
 import * as knn from "@tensorflow-models/knn-classifier";
 import soundUrl from "./assets/alert2.mp3";
 import { initNotifications, notify } from "@mycv/f8-notification";
+import { Button } from "antd";
 var sound = new Howl({
   src: [soundUrl],
 });
@@ -17,19 +18,22 @@ var sound = new Howl({
 function App() {
   const userVideo = useRef();
   const classifier = useRef();
+  const [load, setLoad] = useState("");
   const mobilenet_module = useRef();
   const [canPlaySound, setPlaySound] = useState(true);
   const [touch, setTouch] = useState(false);
+  const [showBtn, setShowBtn] = useState(false);
   const init = async () => {
-    console.log("init...");
+    setLoad("init...");
     await setUpCam();
-    console.log("setup camera done");
+    setLoad("setup camera done");
     //setup
     classifier.current = knn.create();
     mobilenet_module.current = await mobilenet.load();
     //done setup
-    console.log("setup done");
-    console.log("Don't touch your face and click Train 1");
+    setLoad("setup done");
+    setLoad("Don't touch your face and click Train 1");
+    setShowBtn(true);
     initNotifications({ cooldown: 3000 });
   };
   const setUpCam = () => {
@@ -71,7 +75,8 @@ function App() {
   const handleTrain = async (label) => {
     console.log(`${label}: traing your machine...`);
     for (let i = 0; i < TRAINING_TIME; ++i) {
-      console.log(`Progress ${parseInt(((i + 1) / TRAINING_TIME) * 100)}%`);
+      // console.log(`Progress ${parseInt(((i + 1) / TRAINING_TIME) * 100)}%`);
+      setLoad(`Progress ${parseInt(((i + 1) / TRAINING_TIME) * 100)}%`);
       await handleTraining(label);
     }
   };
@@ -113,32 +118,33 @@ function App() {
   return (
     <div className={`main ${touch ? "touch" : ""}`}>
       <video ref={userVideo} className="video" autoPlay></video>
-      <div className="control">
-        <button
+      <div className={`control ${showBtn ? "show" : ""}`}>
+        <Button
           className="btn"
           onClick={() => {
             handleTrain(NOT_TOUCH_LABEL);
           }}
         >
           Train 1
-        </button>
-        <button
+        </Button>
+        <Button
           className="btn"
           onClick={() => {
             handleTrain(TOUCHED_LABEL);
           }}
         >
           Train 2
-        </button>
-        <button
+        </Button>
+        <Button
           className="btn"
           onClick={() => {
             run();
           }}
         >
           Run
-        </button>
+        </Button>
       </div>
+      <h2>{load}</h2>
     </div>
   );
 }
